@@ -1,0 +1,17 @@
+{
+  "name": "medchain",
+  "version": "1.0.0",
+  "description": "MedChain Fabric Node.js chaincode",
+  "main": "index.js",
+  "scripts": {
+    "start": "fabric-chaincode-node start"
+  },
+  "dependencies": {
+    "fabric-contract-api": "^2.5.0",
+    "fabric-shim": "^2.5.0"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "license": "Apache-2.0"
+}

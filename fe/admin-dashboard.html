@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Admin Dashboard | MedChain Network</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#3617cf", "surface-dark": "#1a1825" },
+                    fontFamily: { "display": ["Manrope", "sans-serif"] }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="h-full bg-gray-50 dark:bg-[#0f0e17] font-display text-[#121118] dark:text-gray-200 overflow-hidden">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-[#111827] text-white hidden md:flex flex-col z-20 shadow-xl">
+            <div class="h-20 flex items-center px-6 border-b border-gray-800">
+                <div class="flex items-center gap-2 text-primary">
+                    <span class="material-symbols-outlined text-2xl text-blue-500">admin_panel_settings</span>
+                    <h2 class="text-lg font-extrabold tracking-tight text-white">MedChain <span class="text-blue-500 text-xs uppercase ml-1">Admin</span></h2>
+                </div>
+            </div>
+            <nav class="flex-1 px-4 space-y-2 overflow-y-auto mt-6">
+                <a href="admin-dashboard.html" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-900/50">
+                    <span class="material-symbols-outlined">dashboard</span> Network Overview
+                </a>
+                <a href="admin-hospitals.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">domain</span> Hospital Management
+                </a>
+                <a href="admin-doctors.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">medical_services</span> Doctor Management
+                </a>
+                <a href="admin-ledger.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">receipt_long</span> Blockchain Event Log
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-800 bg-[#0b111d]">
+                <button id="logoutBtn" class="flex items-center gap-3 text-gray-400 hover:text-red-500 transition-colors w-full">
+                    <span class="material-symbols-outlined">logout</span> <span class="text-sm font-medium">Log Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative p-6 lg:p-10">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Network Overview</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Real-time status of the decentralized infrastructure.</p>
+                </div>
+                <button onclick="window.location.reload()" class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-sm font-bold hover:bg-gray-50 dark:hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-sm">refresh</span> Refresh
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-blue-600">
+                            <span class="material-symbols-outlined">domain</span>
+                        </div>
+                        <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">Live</span>
+                    </div>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Hospitals</p>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mt-1" id="val-hospitals">Loading...</h3>
+                </div>
+
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl text-purple-600">
+                            <span class="material-symbols-outlined">stethoscope</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Doctors</p>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mt-1" id="val-doctors">Loading...</h3>
+                </div>
+
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl text-indigo-600">
+                            <span class="material-symbols-outlined">group</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total Patients</p>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mt-1" id="val-patients">Loading...</h3>
+                </div>
+
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 p-6 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl text-orange-600">
+                            <span class="material-symbols-outlined">history</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wider">Records This Week</p>
+                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mt-1" id="val-events">Loading...</h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <div class="lg:col-span-2 space-y-6">
+                    <h3 class="font-bold text-gray-800 dark:text-white text-lg">Quick Access Modules</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="admin-hospitals.html" class="group bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 p-6 rounded-2xl hover:border-blue-500 transition-all shadow-sm">
+                            <div class="size-12 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined">domain_add</span></div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Hospitals</h4>
+                        </a>
+                        <a href="admin-doctors.html" class="group bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 p-6 rounded-2xl hover:border-purple-500 transition-all shadow-sm">
+                            <div class="size-12 bg-purple-100 dark:bg-purple-900/20 rounded-full flex items-center justify-center text-purple-600 mb-4 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined">medical_services</span></div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Doctors</h4>
+                        </a>
+                        <a href="admin-ledger.html" class="group bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 p-6 rounded-2xl hover:border-indigo-500 transition-all shadow-sm">
+                            <div class="size-12 bg-indigo-100 dark:bg-indigo-900/20 rounded-full flex items-center justify-center text-indigo-600 mb-4 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined">view_timeline</span></div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Event Log</h4>
+                        </a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm h-fit">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-red-500 animate-pulse">notifications_active</span> Live Alerts
+                        </h3>
+                    </div>
+                    <div class="space-y-4" id="alertsContainer"><div class="text-center py-10 text-gray-400">Loading feeds...</div></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script> AOS.init({ duration: 800, once: true }); </script>
+    <script type="module" src="js/admin-dashboard.js"></script>
+</body>
+</html>

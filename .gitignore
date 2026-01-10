@@ -1,0 +1,33 @@
+node_modules/
+dist/
+build/
+.DS_Store
+.env
+wallet/
+fabric-samples/
+ledger-data/
+*.log
+# Dependencies
+node_modules/
+dist/
+build/
+
+# Hyperledger Fabric Generated Crypto (DO NOT UPLOAD THESE)
+organizations/
+channel-artifacts/
+system-genesis-block/
+*.block
+*.tx
+wallet/
+fabric-ca-client/
+
+# Environment Variables (Secrets)
+.env
+
+# Logs and System Files
+*.log
+.DS_Store
+.vscode/
+
+# IPFS Data (If any)
+ipfs/

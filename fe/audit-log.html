@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Audit Log | MedChain</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3617cf; border-radius: 3px; }
+    </style>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3617cf",
+                        "background-light": "#f8f9fc",
+                        "background-dark": "#0f0e17",
+                        "surface-dark": "#1a1825",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="h-full bg-background-light dark:bg-background-dark font-display text-[#121118] dark:text-gray-200 overflow-hidden">
+
+    <div class="flex h-screen">
+        
+        <aside class="w-64 bg-white dark:bg-surface-dark border-r border-gray-200 dark:border-white/5 hidden md:flex flex-col z-20">
+            <div class="h-20 flex items-center px-6 border-b border-gray-100 dark:border-white/5">
+                <div class="flex items-center gap-2 text-primary">
+                    <div class="size-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <span class="material-symbols-outlined text-xl">dataset_linked</span>
+                    </div>
+                    <h2 class="text-lg font-extrabold tracking-tight text-gray-900 dark:text-white">MedChain</h2>
+                </div>
+            </div>
+
+            <div class="px-6 py-6">
+                <div class="p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Node Online</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-1">Wallet Address:</p>
+                    <div class="flex items-center gap-2">
+                        <code id="walletAddressSidebar" class="text-sm font-mono text-primary font-bold truncate">Loading...</code>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+                <a href="pdashboard.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="my-record.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined">description</span>
+                    My Records
+                </a>
+                <a href="data-exchange.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <span class="material-symbols-outlined">share</span>
+                    Data Exchange
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined">history</span>
+                    Audit Log
+                </a>
+            </nav>
+
+             <div class="p-4 border-t border-gray-100 dark:border-white/5">
+                <div class="flex items-center gap-3">
+                    <img class="h-10 w-10 rounded-full bg-gray-300" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" alt="">
+                    <div class="flex-1 min-w-0">
+                        <p id="sidebarName" class="text-sm font-medium text-gray-900 dark:text-white truncate">Loading...</p>
+                        <p id="sidebarId" class="text-xs text-gray-500 truncate">ID: ...</p>
+                    </div>
+                    <button id="logoutBtn" class="text-gray-400 hover:text-red-500 transition-colors">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative p-6 lg:p-10">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4" data-aos="fade-down">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Audit Trail</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Immutable ledger of all activities and data access.</p>
+                </div>
+                
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-full">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span class="text-xs font-bold text-green-700 dark:text-green-400 uppercase tracking-wider">Live Monitoring</span>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 dark:bg-white/5 text-[11px] font-bold text-gray-500 border-b border-gray-100 dark:border-white/5 uppercase tracking-wider">
+                                <th class="px-6 py-4">Timestamp (UTC)</th>
+                                <th class="px-6 py-4">Event / Action</th>
+                                <th class="px-6 py-4">Actor</th>
+                                <th class="px-6 py-4">Data Changes</th>
+                                <th class="px-6 py-4">Transaction Info</th>
+                                <th class="px-6 py-4">Chain Verified</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTableBody" class="divide-y divide-gray-100 dark:divide-white/5 text-sm">
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-gray-500">
+                                    Connecting to Blockchain Ledger...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        function copyToClipboard() {
+            Toastify({ text: "Address Copied!", backgroundColor: "#3617cf", duration: 2000 }).showToast();
+        }
+    </script>
+
+    <script type="module" src="js/audit-log.js"></script>
+</body>
+</html>

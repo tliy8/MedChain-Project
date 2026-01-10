@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Record Details | MedChain</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#3617cf", "background-light": "#f8f9fc", "surface-dark": "#1a1825" },
+                    fontFamily: { "display": ["Manrope", "sans-serif"] }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="h-full bg-background-light dark:bg-[#0f0e17] font-display text-[#121118] dark:text-gray-200">
+
+    <div class="h-16 bg-white dark:bg-surface-dark border-b border-gray-200 dark:border-white/5 flex items-center px-6 justify-between">
+        <div class="flex items-center gap-2 text-primary">
+            <span class="material-symbols-outlined text-xl">dataset_linked</span>
+            <h2 class="text-lg font-extrabold tracking-tight text-gray-900 dark:text-white">MedChain</h2>
+        </div>
+        <button onclick="window.close()" class="text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-bold">
+            <span class="material-symbols-outlined">close</span> Close Viewer
+        </button>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-6 lg:p-10">
+        
+        <div class="mb-8 border-b border-gray-200 dark:border-white/10 pb-6">
+            <h1 id="recordTitle" class="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                <span class="material-symbols-outlined animate-spin">sync</span> Loading...
+            </h1>
+            <p id="recordDate" class="text-gray-500 dark:text-gray-400 mt-2 font-mono text-sm">...</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm overflow-hidden min-h-[600px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5">
+                        <h3 class="font-bold text-gray-700 dark:text-gray-200">Decrypted Medical Content</h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">lock_open</span> AES-256 Decrypted
+                        </span>
+                    </div>
+                    
+                    <div id="fileViewer" class="p-0 flex-1 bg-white dark:bg-[#0c0b10] flex items-center justify-center overflow-y-auto">
+                        <div class="text-center text-gray-400 p-8">
+                            <span class="material-symbols-outlined text-4xl mb-2">hourglass_top</span>
+                            <p>Fetching data from IPFS...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                
+                <div id="vitalsContainer">
+                    </div>
+
+                <div class="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-white/5 p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">info</span> Record Metadata
+                    </h3>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Record ID</p>
+                            <p id="metaId" class="font-mono text-xs text-primary font-bold mt-1 break-all">...</p>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-gray-100 dark:border-white/5">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Attending Doctor</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="material-symbols-outlined text-gray-400">stethoscope</span>
+                                <p id="metaDoctor" class="text-sm font-bold text-gray-900 dark:text-white">...</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Medical Facility</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="material-symbols-outlined text-gray-400">domain</span>
+                                <p id="metaHospital" class="text-sm text-gray-700 dark:text-gray-300">...</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-100 dark:border-white/5">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-wider font-bold">IPFS Hash (CID)</p>
+                            <p id="metaHash" class="font-mono text-[10px] text-gray-500 break-all bg-gray-100 dark:bg-white/5 p-2 rounded mt-1">...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 dark:bg-blue-900/10 rounded-2xl border border-blue-100 dark:border-blue-500/20 p-6">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined text-blue-600 mt-1">verified_user</span>
+                        <div>
+                            <h4 class="font-bold text-blue-900 dark:text-blue-100 text-sm">Blockchain Verified</h4>
+                            <p class="text-xs text-blue-700 dark:text-blue-300 mt-1">
+                                Signature validated against ledger.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="js/record-detail.js"></script>
+</body>
+</html>

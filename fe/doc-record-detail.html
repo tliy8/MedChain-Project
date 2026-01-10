@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Verify Record | MedChain</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#3617cf", "accent": "#0ea5e9", "background-light": "#f8f9fc", "surface-dark": "#1a1825" },
+                    fontFamily: { "display": ["Manrope", "sans-serif"] }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="h-full bg-background-light dark:bg-[#0f0e17] font-display text-[#121118] dark:text-gray-200">
+
+    <div class="h-16 bg-white dark:bg-surface-dark border-b border-gray-200 dark:border-white/5 flex items-center px-6 justify-between sticky top-0 z-50 shadow-sm">
+        <div class="flex items-center gap-2 text-primary">
+            <span class="material-symbols-outlined text-xl">dataset_linked</span>
+            <h2 class="text-lg font-extrabold tracking-tight text-gray-900 dark:text-white">MedChain</h2>
+        </div>
+        <button onclick="window.close()" class="text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-bold">
+            <span class="material-symbols-outlined">close</span> Close Viewer
+        </button>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-6 lg:p-10">
+        
+        <div class="flex items-center gap-4 mb-8" data-aos="fade-down">
+            <button id="backButton" onclick="history.length > 1 ? history.back() : window.close()" class="size-10 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 flex items-center justify-center hover:bg-gray-50 transition-colors text-gray-500">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </button>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Record Verification</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Reviewing secure record: <span id="recordIdHeader" class="font-mono font-bold text-gray-700 dark:text-gray-300">Loading...</span></p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-2 space-y-8" data-aos="fade-up">
+
+                <div class="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm overflow-hidden min-h-[700px] flex flex-col">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5">
+                        <h3 class="font-bold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">visibility</span> Document Preview
+                        </h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-xs">lock_open</span> AES-256 Decrypted
+                        </span>
+                    </div>
+                    
+                    <div id="fileViewer" class="p-0 flex-1 bg-gray-100 dark:bg-[#0c0b10] flex items-center justify-center relative min-h-[600px]">
+                        <div class="text-center text-gray-400 p-8">
+                            <span class="material-symbols-outlined text-4xl mb-2 animate-bounce">cloud_download</span>
+                            <p>Securely fetching content from IPFS...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm space-y-6">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-white/5 pb-4">
+                        Record Metadata
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-4">
+                        <div class="col-span-2">
+                            <p class="text-xs uppercase text-gray-500 font-medium">Record Name</p>
+                            <p id="recordName" class="text-base font-bold text-primary">Loading...</p>
+                        </div>
+                        
+                        <div><p class="text-xs uppercase text-gray-500 font-medium">Record ID</p><p id="recordId" class="text-base font-mono">Loading...</p></div>
+                        <div><p class="text-xs uppercase text-gray-500 font-medium">Record Type</p><p id="recordType" class="text-base">Loading...</p></div>
+                        <div><p class="text-xs uppercase text-gray-500 font-medium">Patient ID</p><p id="patientId" class="text-base font-mono text-gray-700 dark:text-gray-300">Loading...</p></div>
+                        <div><p class="text-xs uppercase text-gray-500 font-medium">Hospital ID</p><p id="hospitalId" class="text-base">Loading...</p></div>
+                        <div><p class="text-xs uppercase text-gray-500 font-medium">Uploaded By</p><p id="doctorId" class="text-base font-mono text-gray-700 dark:text-gray-300">Loading...</p></div>
+                        <div><p class="text-xs uppercase text-gray-500 font-medium">Date Uploaded</p><p id="timestamp" class="text-base">Loading...</p></div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100 dark:border-white/5">
+                        <p class="text-xs uppercase text-gray-500 font-medium mb-1">Description / Notes</p>
+                        <div id="description" class="bg-gray-50 dark:bg-white/5 p-4 rounded-lg text-gray-700 dark:text-gray-300 italic">
+                            Loading record notes...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1 space-y-8" data-aos="fade-left" data-aos-delay="100">
+
+                <div id="vitalsContainer">
+                    <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm space-y-4">
+                        <h4 class="font-bold text-gray-900 dark:text-white flex items-center gap-2 border-b border-gray-100 dark:border-white/5 pb-4">
+                            <span class="material-symbols-outlined text-lg text-red-500">favorite</span>
+                            Vitals Snapshot
+                        </h4>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-white/5 rounded-xl">
+                                <span class="text-xs text-gray-500">Heart Rate</span>
+                                <span id="vitalsHeartRate" class="font-bold text-gray-900 dark:text-white">--</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-white/5 rounded-xl">
+                                <span class="text-xs text-gray-500">BP</span>
+                                <span id="vitalsBP" class="font-bold text-gray-900 dark:text-white">--</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-white/5 rounded-xl">
+                                <span class="text-xs text-gray-500">Weight</span>
+                                <span id="vitalsWeight" class="font-bold text-gray-900 dark:text-white">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ipfsBox" class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-500/20 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="material-symbols-outlined text-2xl text-blue-600">verified_user</span>
+                        <p class="text-lg font-bold text-blue-900 dark:text-blue-100">Blockchain Verified</p>
+                    </div>
+                    <p class="text-xs text-blue-700 dark:text-blue-300 mb-2">
+                        Integrity confirmed via Smart Contract.
+                    </p>
+                    <div class="bg-white/50 dark:bg-black/20 p-2 rounded border border-blue-200 dark:border-blue-500/30">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold">IPFS Hash (CID)</p>
+                        <p id="ipfsHash" class="text-xs font-mono break-all text-blue-600 dark:text-blue-400 mt-1">...</p>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-2xl p-6 shadow-sm space-y-4">
+                    <h4 class="font-bold text-gray-900 dark:text-white flex items-center gap-2 border-b border-gray-100 dark:border-white/5 pb-4">
+                        <span class="material-symbols-outlined text-lg text-gray-500">receipt_long</span>
+                        Audit Trail
+                    </h4>
+                    <div id="auditTrailContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                        <div id="loadingHistory" class="text-center py-4 text-gray-500 text-sm">
+                            Fetching transaction history...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script> AOS.init({ duration: 800, once: true }); </script>
+    
+    <script type="module" src="js/doc-record-detail.js"></script>
+</body>
+</html>

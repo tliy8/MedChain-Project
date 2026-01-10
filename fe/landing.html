@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MedChain | Secure Health Data</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { "primary": "#3617cf", "secondary": "#0F172A", "accent": "#0ea5e9" },
+                    fontFamily: { "display": ["Manrope", "sans-serif"] }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-slate-50 font-display text-slate-900 selection:bg-primary/20 selection:text-primary">
+
+    <header class="fixed w-full z-50 glass border-b border-gray-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="size-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined">dataset_linked</span>
+                </div>
+                <span class="text-xl font-extrabold tracking-tight">MedChain</span>
+            </div>
+            
+            <nav class="hidden md:flex gap-8 text-sm font-bold text-slate-500">
+                <a href="#problem" class="hover:text-primary transition-colors">The Problem</a>
+                <a href="#solution" class="hover:text-primary transition-colors">The Solution</a>
+                <a href="#tech" class="hover:text-primary transition-colors">Technology</a>
+            </nav>
+
+            <div class="flex gap-4">
+                <a href="login.html" class="px-6 py-2.5 rounded-lg bg-secondary text-white font-bold shadow-lg hover:bg-slate-800 transition-transform hover:-translate-y-0.5 flex items-center gap-2">
+                    Login Portal <span class="material-symbols-outlined text-sm">login</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20">
+        
+        <section class="relative pt-24 pb-32 overflow-hidden">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-40 -z-10"></div>
+            
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-primary text-xs font-bold uppercase tracking-wider mb-8 animate-bounce" style="animation-duration: 2s;">
+                    <span class="material-symbols-outlined text-sm">verified</span> 
+                    Blockchain Secured Healthcare
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 text-slate-900" data-aos="fade-up">
+                    Your Health Data. <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Secure. Immutable. Yours.</span>
+                </h1>
+                
+                <p class="text-xl text-slate-500 mb-10 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+                    Traditional systems are failing. MedChain uses <strong>Hyperledger Fabric</strong> to give patients absolute control over their medical history while preventing data breaches and delays.
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
+                    <a href="#problem" class="px-8 py-4 bg-white border border-gray-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-gray-50 transition-colors">
+                        Why Do We Need This?
+                    </a>
+                    <a href="login.html" class="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-xl hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                        Launch System <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="problem" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <span class="text-red-500 font-bold tracking-wider uppercase text-sm">The Current Crisis</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-900 mt-2">Why Traditional Healthcare IT Fails</h2>
+                    <p class="text-slate-500 max-w-2xl mx-auto mt-4">Centralized databases create single points of failure. The consequences are real and dangerous.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-red-200 hover:shadow-lg transition-all group" data-aos="fade-up">
+                        <div class="size-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">timer_off</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Life-Threatening Delays</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Emergency transfers can take over <strong class="text-slate-900">174 minutes</strong> for stroke patients because hospitals cannot share data instantly.
+                        </p>
+                    </div>
+
+                    <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-orange-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="size-14 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">lock_open</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Massive Data Breaches</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Centralized servers are hacker targets. In 2023 alone, <strong class="text-slate-900">133 million records</strong> were stolen in cyberattacks[cite: 182].
+                        </p>
+                    </div>
+
+                    <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-yellow-200 hover:shadow-lg transition-all group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="size-14 bg-yellow-100 text-yellow-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-3xl">edit_off</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Silent Data Tampering</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Standard databases allow records to be edited or deleted silently. There is no guarantee that your medical history hasn't been altered[cite: 186].
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-24 bg-slate-900 text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-primary rounded-full blur-[150px] opacity-20 pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    
+                    <div class="lg:w-1/2" data-aos="fade-right">
+                        <span class="text-accent font-bold tracking-wider uppercase text-sm">The Solution</span>
+                        <h2 class="text-4xl md:text-5xl font-black mt-2 mb-6">MedChain: Trustless Integrity.</h2>
+                        <p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                            We solve these problems by moving away from centralized servers. MedChain uses a <strong>Private Blockchain</strong> where data is permanent, and access is controlled by code, not people.
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <div class="mt-1 size-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold"><span class="material-symbols-outlined text-lg">policy</span></div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Smart Access Control (Chaincode)</h4>
+                                    <p class="text-slate-400 text-sm mt-1">Doctors can only view records if the patient has granted permission via a smart contract. No permission = No access[cite: 270].</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <div class="mt-1 size-8 rounded-lg bg-green-600 flex items-center justify-center text-white font-bold"><span class="material-symbols-outlined text-lg">cloud_done</span></div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Secure Off-Chain Storage (IPFS)</h4>
+                                    <p class="text-slate-400 text-sm mt-1">Large files (MRI, X-Rays) are encrypted and stored on IPFS. Only the unique "fingerprint" (Hash) is stored on the blockchain[cite: 274].</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="mt-1 size-8 rounded-lg bg-purple-600 flex items-center justify-center text-white font-bold"><span class="material-symbols-outlined text-lg">history_edu</span></div>
+                                <div>
+                                    <h4 class="font-bold text-lg">Immutable Audit Trail</h4>
+                                    <p class="text-slate-400 text-sm mt-1">Every time a record is viewed or uploaded, it is permanently logged. This history cannot be deleted or changed[cite: 278].</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:w-1/2" data-aos="fade-left">
+                        <div class="bg-[#0f172a] border border-slate-700 p-6 rounded-2xl shadow-2xl relative">
+                            <div class="absolute -top-3 -right-3 bg-green-500 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Live Logic</div>
+                            
+                            <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-4">
+                                <div class="size-3 rounded-full bg-red-500"></div>
+                                <div class="size-3 rounded-full bg-yellow-500"></div>
+                                <div class="size-3 rounded-full bg-green-500"></div>
+                                <div class="ml-auto font-mono text-xs text-slate-500">verify_integrity.js</div>
+                            </div>
+
+                            <div class="space-y-3 font-mono text-xs md:text-sm">
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">01</span>
+                                    <p><span class="text-purple-400">const</span> gateway = <span class="text-blue-400">new</span> Gateway();</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">02</span>
+                                    <p><span class="text-blue-400">await</span> gateway.connect(ccp, { wallet, identity });</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">03</span>
+                                    <p class="text-slate-500">// 1. Fetch Immutable Hash from Ledger</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">04</span>
+                                    <p><span class="text-purple-400">const</span> result = <span class="text-blue-400">await</span> contract.evaluateTransaction(<span class="text-yellow-300">'GetHash'</span>, recordId);</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">05</span>
+                                    <p><span class="text-purple-400">const</span> ledgerHash = result.toString();</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">06</span>
+                                    <p class="text-slate-500">// 2. Compare with Actual File</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">07</span>
+                                    <p><span class="text-purple-400">if</span> (fileHash === ledgerHash) {</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">08</span>
+                                    <p class="pl-4 text-green-400">return "INTEGRITY VERIFIED";</p>
+                                </div>
+                                <div class="flex gap-4">
+                                    <span class="text-slate-600 select-none">09</span>
+                                    <p>}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center text-xs text-slate-500 mt-4">Actual logic used in MedChain backend.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech" class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <span class="text-primary font-bold tracking-wider uppercase text-sm">Under the Hood</span>
+                <h2 class="text-3xl font-black text-slate-900 mb-12 mt-2">Built with Enterprise-Grade Technology</h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                    <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" class="h-12 w-12 object-contain" alt="HTML5">
+                        <h4 class="font-bold text-slate-900">HTML5</h4>
+                        <p class="text-xs text-slate-500">User Interface</p>
+                    </div>
+
+                    <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                        <img src="https://nodejs.org/static/images/logo.svg" class="h-12 w-auto object-contain" alt="Node.js">
+                        <h4 class="font-bold text-slate-900">Node.js</h4>
+                        <p class="text-xs text-slate-500">Backend API</p>
+                    </div>
+
+                    <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                        <img src="https://www.hyperledger.org/wp-content/uploads/2016/09/hyperledger_fabric_logo_color.png" class="h-12 w-auto object-contain" alt="Hyperledger Fabric">
+                        <h4 class="font-bold text-slate-900">Hyperledger Fabric</h4>
+                        <p class="text-xs text-slate-500">Permissioned Ledger</p>
+                    </div>
+
+                    <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                        <div class="size-12 bg-slate-900 text-white rounded-full flex items-center justify-center font-mono font-bold text-lg">&lt;/&gt;</div>
+                        <h4 class="font-bold text-slate-900">Chaincode</h4>
+                        <p class="text-xs text-slate-500">Smart Contracts</p>
+                    </div>
+
+                    <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col items-center gap-3 hover:-translate-y-1 transition-transform">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Ipfs-logo-1024-ice-text.png" class="h-12 w-12 object-contain" alt="IPFS">
+                        <h4 class="font-bold text-slate-900">IPFS</h4>
+                        <p class="text-xs text-slate-500">Decentralized Storage</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2 text-slate-900">
+                <span class="material-symbols-outlined text-primary">verified_user</span>
+                <span class="font-extrabold text-xl">MedChain</span>
+            </div>
+            <p class="text-slate-500 text-sm">© 2025 MedChain Project. Final Year Project (FYP).</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+</body>
+</html>

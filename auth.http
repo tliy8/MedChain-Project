@@ -1,0 +1,85 @@
+@baseUrl = http://localhost:3000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmYWJyaWNfaWQiOiJQQVQ5MDEiLCJyb2xlIjoicGF0aWVudCIsIm9yZyI6Im9yZzEiLCJpYXQiOjE3NjQ5OTE4NTEsImV4cCI6MTc2NDk5NTQ1MX0.oKkR6y78svguZ5TNzvxuQ10jPAoN4_GBInrIUndczN4
+### -------------------------------------------
+### 1. REGISTER PATIENT  (Org1)
+### -------------------------------------------
+POST {{baseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "userId": "PAT901",
+  "name": "Test Patient",
+  "role": "patient",
+  "org": "Org1",
+  "password": "patient900pass"
+}
+
+### -------------------------------------------
+### 2. REGISTER DOCTOR (Org2)
+### -------------------------------------------
+POST {{baseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "userId": "DOC900",
+  "name": "Dr. Test",
+  "role": "doctor",
+  "org": "Org2",
+  "password": "doctor900pass"
+}
+
+### -------------------------------------------
+### 3. LOGIN (PATIENT)
+### -------------------------------------------
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "030523010185",
+  "password": "@Liy0523"
+}
+
+### ⚠️ After login, copy the token and set it below
+### @token = eyJh...
+
+### -------------------------------------------
+### 4. LOGIN (DOCTOR)
+### -------------------------------------------
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "DOC900",
+  "password": "doctor900pass"
+}
+
+### -------------------------------------------
+### 5. GRANT CONSENT (Patient → Doctor)
+### -------------------------------------------
+POST {{baseUrl}}/api/consent/grant
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "providerId": "DOC900"
+}
+
+### -------------------------------------------
+### 6. ADD RECORD (Doctor only)
+### -------------------------------------------
+POST {{baseUrl}}/api/record/add
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "recordId": "REC900",
+  "patientId": "PAT901",
+  "hospitalId": "HOSP900",
+  "fileData": "dGVzdCBtZWRpY2FsIHJlY29yZA=="
+}
+
+### -------------------------------------------
+### 7. VIEW RECORD
+### -------------------------------------------
+GET {{baseUrl}}/api/record/REC900
+Authorization: Bearer {{token}}

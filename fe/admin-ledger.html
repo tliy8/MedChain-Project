@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="h-full" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Event Log | MedChain Admin</title>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#3617cf", "surface-dark": "#1a1825" },
+                    fontFamily: { "display": ["Manrope", "sans-serif"] }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="h-full bg-gray-50 dark:bg-[#0f0e17] font-display text-[#121118] dark:text-gray-200 overflow-hidden">
+
+    <div class="flex h-screen">
+        
+        <aside class="w-64 bg-[#111827] text-white hidden md:flex flex-col z-20 shadow-xl">
+            <div class="h-20 flex items-center px-6 border-b border-gray-800">
+                <div class="flex items-center gap-2 text-primary">
+                    <span class="material-symbols-outlined text-2xl text-blue-500">admin_panel_settings</span>
+                    <h2 class="text-lg font-extrabold tracking-tight text-white">MedChain <span class="text-blue-500 text-xs uppercase ml-1">Admin</span></h2>
+                </div>
+            </div>
+            <nav class="flex-1 px-4 space-y-2 overflow-y-auto mt-6">
+                <a href="admin-dashboard.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Network Overview
+                </a>
+                <a href="admin-hospitals.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">domain</span>
+                    Hospital Management
+                </a>
+                <a href="admin-doctors.html" class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">medical_services</span>
+                    Doctor Management
+                </a>
+                <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-900/50">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    Blockchain Event Log
+                </a>
+            </nav>
+            <div class="p-4 border-t border-gray-800 bg-[#0b111d]">
+                <button id="logoutBtn" class="flex items-center gap-3 text-gray-400 hover:text-red-500 transition-colors w-full">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span class="text-sm font-medium">Log Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative p-6 lg:p-10">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4" data-aos="fade-down">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Blockchain Event Log</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Immutable audit trail of all network operations.</p>
+                </div>
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs font-mono border border-green-200">
+                    <span class="material-symbols-outlined text-sm animate-pulse">rss_feed</span>
+                    Listening to Channel: mychannel
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-gray-200 dark:border-white/5 shadow-sm mb-6 space-y-4" data-aos="fade-up">
+                <div class="flex items-center gap-2 mb-2 text-sm font-bold text-gray-700 dark:text-gray-300">
+                    <span class="material-symbols-outlined text-indigo-500">filter_alt</span>
+                    Filter Transactions
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Event Type</label>
+                        <select id="filterType" class="w-full rounded-lg border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-black/20 text-sm focus:ring-indigo-500 text-gray-900 dark:text-white">
+                            <option value="">All Events</option>
+                            <option value="RecordCreated">Record Created</option>
+                            <option value="ConsentGranted">Consent Granted</option>
+                            <option value="ConsentRevoked">Consent Revoked</option>
+                            <option value="ViewRecord">View Record</option>
+                            <option value="DoctorRegistered">Doctor Registered</option>
+                            <option value="EmergencyOverride">Emergency Override</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Actor (MSP/User)</label>
+                        <input type="text" id="filterActor" placeholder="e.g. Org1MSP" class="w-full rounded-lg border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-black/20 text-sm focus:ring-indigo-500 text-gray-900 dark:text-white font-mono">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Transaction ID</label>
+                        <input type="text" id="filterTxId" placeholder="e.g. 0x8f2a..." class="w-full rounded-lg border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-black/20 text-sm focus:ring-indigo-500 text-gray-900 dark:text-white font-mono">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Date</label>
+                        <input type="date" id="filterDate" class="w-full rounded-lg border-gray-300 dark:border-white/10 bg-gray-50 dark:bg-black/20 text-sm focus:ring-indigo-500 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button id="resetFilters" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-white mr-2">Reset</button>
+                    <button id="applyFilters" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg shadow-md transition-colors flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">search</span>
+                        Query Ledger
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-white/5 flex justify-between items-center bg-gray-50 dark:bg-white/5">
+                    <h3 class="font-bold text-gray-700 dark:text-gray-200 text-sm uppercase tracking-wide">Ledger History</h3>
+                    <span id="resultCount" class="text-xs font-mono text-gray-500">Showing 0 results</span>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-xs text-gray-500 border-b border-gray-200 dark:border-white/5 uppercase tracking-wider bg-gray-50 dark:bg-white/5">
+                                <th class="px-6 py-3 font-medium w-48">Timestamp</th>
+                                <th class="px-6 py-3 font-medium w-40">Event Type</th>
+                                <th class="px-6 py-3 font-medium w-40">Initiator</th>
+                                <th class="px-6 py-3 font-medium">Payload Data</th>
+                                <th class="px-6 py-3 font-medium text-right w-32">Tx ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerTableBody" class="divide-y divide-gray-100 dark:divide-white/5 text-sm">
+                            <tr><td colspan="5" class="p-8 text-center text-gray-500">Waiting for query...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+    </script>
+    <script type="module" src="js/admin-ledger.js"></script>
+</body>
+</html>
