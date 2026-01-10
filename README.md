@@ -1,43 +1,37 @@
-Notes on the New Authentication Test Sequence
+# MedChain Project
 
-This test sequence validates the new JWT and Firestore-based authentication logic implemented in server.js.
+A Blockchain Medical Record System using **Hyperledger Fabric and IPFS**.
 
-1. Registration (/api/user/register)
+# ⚡ Prerequisites
+Make sure you have **Docker**, **Node.js**, and **Hyperledger Fabric** installed in Ubuntu (WSL).
 
-Action: This is now a two-part process:
+---
 
-Calls the Go Connector (as an Admin) to register the identity on the Fabric ledger.
+# 🚀 How to Start (Run in 4 Terminals)
 
-Hashes the password and saves the credentials (userId and hashed_password) to the Firestore users collection.
+# Terminal 1: Start Blockchain
+```bash
+cd network
+./network.sh up createChannel -ca -s couchdb
+./network.sh deployCC -ccn medchain -ccp ../chaincode/medchain/ -ccl javascript
 
-Goal: Set up both the blockchain identity and the web authentication credentials.
+# Terminal 2: Start Backend
+cd server
+npm install
+node enrollAdmin.js
+node registerUser.js
+node server.js
 
-2. Login and Token Capture (/api/auth/login)
+# Terminal 3: Start IPFS Storage
+ipfs daemon
 
-Action: The request sends the username and password. The backend verifies the hash against Firestore.
+# Terminal 4: Start Frontend
+cd fe
+python3 -m http.server
 
-Token Capture: We use special syntax (@name capture_... and @... = {{...}}) available in REST client tools to automatically extract the returned token from the JSON response body.
+🌐 Open the Website
+Go to your browser and visit: 👉 http://localhost:8000
 
-Variable Usage: The captured JWTs are saved to:
-
-{{patient_token}}
-
-{{doctor_token}}
-
-These tokens are then used in the Authorization header for all subsequent protected API calls.
-
-3. Protected Routes (e.g., /api/consent/grant, /api/record/add)
-
-Header: All protected routes now require: Authorization: Bearer {{TOKEN}}.
-
-Backend Logic (authenticateToken): The middleware does the following:
-
-Verifies the JWT is valid and unexpired.
-
-Extracts the user's Fabric ID (e.g., patient01) from the token payload.
-
-Attaches this ID to the request object (req.user.fabric_id).
-
-Transaction Submission: The API endpoint (e.g., /api/consent/grant) then uses req.user.fabric_id to dynamically call submitTransaction(...), ensuring the transaction is signed with the correct user's private key.
-
-This setup ensures that unauthorized users without a token are blocked immediately, and authenticated users are still checked by the chaincode for permissioning (as seen in Test Case 12).
+Login 
+Username:admin
+Password:password123
