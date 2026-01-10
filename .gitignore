@@ -12,7 +12,7 @@ node_modules/
 dist/
 build/
 
-# Hyperledger Fabric Generated Crypto (DO NOT UPLOAD THESE)
+# Hyperledger Fabric Generated Crypto
 organizations/
 channel-artifacts/
 system-genesis-block/
@@ -21,7 +21,7 @@ system-genesis-block/
 wallet/
 fabric-ca-client/
 
-# Environment Variables (Secrets)
+# Environment Variables
 .env
 
 # Logs and System Files
@@ -29,5 +29,5 @@ fabric-ca-client/
 .DS_Store
 .vscode/
 
-# IPFS Data (If any)
+# IPFS Data
 ipfs/
