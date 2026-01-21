@@ -80,7 +80,7 @@ async function loadDoctorProfile() {
 }
 async function verifyConsentOrBlock() {
     try {
-        const res = await api.get(`/record/check-consent/${patientId}`);
+        const res = await api.get(`/consent/check-consent/${patientId}`);
 
         if (!res.allowed) {
             Toastify({
@@ -106,7 +106,7 @@ async function verifyConsentOrBlock() {
 async function loadPatient() {
     elements.signerId.innerText = doctorId || "Unknown";
     try {
-        const user = await api.get(`/user/${patientId}`);
+        const user = await api.get(`/patient/${patientId}`);
         elements.patientName.innerText = user.name;
         elements.patientId.innerText = user.userId;
         elements.patientAvatar.innerText = user.name.substring(0,2).toUpperCase();

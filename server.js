@@ -2,9 +2,8 @@
 // Run: node server.js
 let CURRENT_BLOCK_HEIGHT = "Syncing...";
 import express from 'express';
-import bodyParser from 'body-parser';
 import cors from 'cors';
-import multer from 'multer'; // Ensure multer is imported
+import multer from 'multer';
 import { submitTransaction, evaluateTransaction } from './fabric_gateway.js';
 import { uploadEncryptedFile, getAndDecryptFile } from './ipfs_handler.js';
 
@@ -22,7 +21,6 @@ dotenv.config();
 
 import FabricCAServices from 'fabric-ca-client';
 import { Gateway, Wallets } from 'fabric-network';
-import crypto from 'crypto';
 
 // Fix __dirname for ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -33,7 +31,6 @@ const httpServer = http.createServer(app);
 const io = new Server(httpServer,{
   cors:{origin:"*"}
 });
-dotenv.config();
 
 const port=process.env.PORT;
 
@@ -70,7 +67,6 @@ app.use(cors());
 // ⭐ FIX: Increase limit to 500MB for large medical files
 app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ limit: '500mb', extended: true }));
-// app.use(bodyParser.json()); // Removed redundant bodyParser
 
 // ============================================================
 // 2. UPDATE MULTER (Allow Large File Objects)
@@ -238,15 +234,12 @@ app.post('/api/user/register', async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 });
-
 // checkuser name +password verify identity by connecting to hyperledger fabric
 app.post('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
-
   if (!username || !password) {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
-
   try {
     // -------------------------------
     // 1. 🔒 Authenticate with Firebase
@@ -328,7 +321,6 @@ app.post('/api/auth/login', async (req, res) => {
 /* ============================================================
    CONSENT, ADD RECORD, VIEW RECORD (unchanged logic but fixed parsing)
    ============================================================ */
-
 app.post('/api/consent/grant', authenticateToken, async (req, res) => {
   const patientId = req.user.fabric_id;
   const { providerId } = req.body;
@@ -432,7 +424,7 @@ app.post('/api/record/add', authenticateToken, upload.single('file'), async (req
     }
 });
 //check consent
-app.get('/api/record/check-consent/:patientId', authenticateToken, async (req, res) => {
+app.get('/api/consent/check-consent/:patientId', authenticateToken, async (req, res) => {
     const doctorId = req.user.fabric_id;
     const callerOrg = req.user.org;
     const { patientId } = req.params;
@@ -588,10 +580,6 @@ app.get('/api/patient/:patientId/records', authenticateToken, async (req, res) =
     }
 });
 
-
-// GET /api/record/single/:recordId
-// GET /api/record/single/:recordId
-// GET /api/record/single/:recordId
 app.get('/api/record/single/:recordId', authenticateToken, async (req, res) => {
     const callerId = req.user.fabric_id;
     const callerOrg = req.user.org;
@@ -660,7 +648,6 @@ app.get('/api/record/view/:recordId', authenticateToken, async (req, res) => {
         return res.status(404).json({ error: "Record not found" });
     }
 });
-
 // 2. GET RECORD HISTORY (AUDIT TRAIL)
 app.get('/api/record/history/:recordId', authenticateToken, async (req, res) => {
     const doctorId = req.user.fabric_id;
@@ -1272,30 +1259,6 @@ app.get('/api/admin/doctors', authenticateToken, async (req, res) => {
         res.status(500).json({ error: "Failed to fetch doctor registry from blockchain." });
     }
 });
-/* ============================================================
-   GET LEDGER EVENTS (History)
-   ============================================================ */
-/* ============================================================
-   GET FULL LEDGER HISTORY (Aggregated)
-   ============================================================ */
-/* ============================================================
-   GET COMPREHENSIVE AUDIT LOG (Doctors & Patients)
-   ============================================================ */
-/* ============================================================
-   GET COMPREHENSIVE AUDIT LOG (Fixed for your Chaincode)
-   ============================================================ */
-/* ============================================================
-   GET COMPREHENSIVE AUDIT LOG (Fixed & Robust)
-   ============================================================ */
-/* ============================================================
-   GET SYSTEM-WIDE AUDIT LOG (Fixed for your Chaincode)
-   ============================================================ */
-/* ============================================================
-   GET SYSTEM-WIDE AUDIT LOG (Doctors & Patients)
-   ============================================================ */
-/* ============================================================
-   GET COMPREHENSIVE AUDIT LOG (With History Replay)
-   ============================================================ */
 app.get('/api/admin/events', authenticateToken, async (req, res) => {
     // 1. Security Check
     if (req.user.role !== 'admin') {
@@ -1735,99 +1698,6 @@ app.get('/api/user/:userId', authenticateToken, async (req, res) => {
         return res.status(404).json({ error: "User not found" });
     }
 });
-
-app.get('/api/patient/:patientId/records', authenticateToken, async (req, res) => {
-    const callerId = req.user.fabric_id;
-    const callerOrg = req.user.org;
-    const callerRole = req.user.role;
-    const targetPatientId = req.params.patientId;
-
-    console.log(`\n🛑 SECURITY CHECK: ${callerId} requesting records for ${targetPatientId}`);
-
-    try {
-        // 1. IS IT THE PATIENT THEMSELVES? (Allow)
-        if (callerId === targetPatientId) {
-             // proceed
-        } 
-        // 2. IS IT A DOCTOR? (Check Consent)
-        else if (callerRole === 'doctor') {
-            console.log("🔗 Verifying Consent Token on Blockchain...");
-            
-            const profileBuffer = await evaluateTransaction(callerId, callerOrg, 'GetUser', targetPatientId);
-            
-            // Handle Empty/Missing Profile safely
-            if (!profileBuffer || profileBuffer.length === 0) {
-                return res.status(404).json({ error: "Patient not found on ledger" });
-            }
-
-            let profile;
-            try {
-                profile = JSON.parse(profileBuffer.toString());
-            } catch (e) {
-                return res.status(500).json({ error: "Failed to parse patient profile" });
-            }
-
-            // Safety Check: Ensure consents is an array
-            const authorizedList = Array.isArray(profile.consents) ? profile.consents : [];
-
-            if (!authorizedList.includes(callerId)) {
-                console.warn(`⛔ BLOCKED: Doctor ${callerId} is NOT in consent list: [${authorizedList}]`);
-                // ❌ RETURN 403 FORBIDDEN (Triggers Red Screen)
-                return res.status(403).json({ error: "ACCESS DENIED: No Consent Token found." });
-            }
-            console.log("✅ ALLOWED: Consent Token Valid.");
-        } 
-        // 3. ANYONE ELSE? (Block)
-        else {
-            return res.status(403).json({ error: "Unauthorized Role" });
-        }
-
-        // --- FETCH RECORDS ---
-        const buffer = await evaluateTransaction(callerId, callerOrg, 'QueryRecordsByPatient', targetPatientId);
-        
-        // Handle Empty Records safely
-        if (!buffer || buffer.length === 0) {
-            return res.status(200).json([]);
-        }
-
-        const records = JSON.parse(buffer.toString());
-        
-        // Sort Newest First
-        if (Array.isArray(records)) {
-            records.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        }
-
-        return res.status(200).json(records);
-
-    } catch (error) {
-        console.error("API ERROR:", error.message);
-        return res.status(500).json({ error: error.message });
-    }
-});
-
-// 2. Get Medical Records for a Specific Patient
-app.get('/api/patient/:patientId/records', authenticateToken, async (req, res) => {
-    const doctorId = req.user.fabric_id;
-    const patientId = req.params.patientId;
-    const org = req.user.org;
-
-    try {
-        console.log(`🔍 Doctor ${doctorId} fetching records for ${patientId}...`);
-
-        // Use 'QueryRecordsByPatient' from chaincode
-        const buffer = await evaluateTransaction(doctorId, org, 'QueryRecordsByPatient', patientId);
-        let records = JSON.parse(buffer.toString());
-
-        // Sort by newest first
-        records = records.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-        return res.status(200).json(records);
-    } catch (error) {
-        console.error("Error fetching records:", error);
-        return res.status(200).json([]); // Return empty list if none found
-    }
-});
-
 // Helper function for time formatting
 function timeAgo(dateString) {
     if (!dateString) return "Recently";

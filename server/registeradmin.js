@@ -1,5 +1,5 @@
 /*
- * registerAdminInFabric.js
+ * /home/wira/medchain-backend/server/registeradmin.js
  * Run this ONCE to fix the "Fabric identity not found" error.
  */
 
@@ -23,13 +23,21 @@ async function main() {
         const caAdminSecret = 'adminpw';  // The default CA password
 
         // 2. SETUP PATHS
+        // NOTE: Ensure this path points to your actual connection profile
         const ccpPath = path.resolve(__dirname, 'config', 'connection-org1.json');
+        
+        // Check if CCP exists before proceeding
+        if (!fs.existsSync(ccpPath)) {
+            throw new Error(`Connection profile not found at: ${ccpPath}`);
+        }
+
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
         const caInfo = ccp.certificateAuthorities['ca.org1.example.com'];
         const caTLSCACerts = caInfo.tlsCACerts.pem;
         const ca = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
 
-        const walletPath = path.join(process.cwd(), 'wallet');
+        // Wallet stores the identity in the current directory
+        const walletPath = path.join(__dirname, 'wallet');
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`📂 Wallet path: ${walletPath}`);
 
@@ -98,12 +106,7 @@ async function main() {
     } catch (error) {
         if(error.message.includes('already registered')) {
              console.log("⚠️ User already registered. Trying to enroll only...");
-             // Fallback: If registered but not in wallet, just enroll
-             try {
-                // Re-create CA client (simplified for brevity, reuse logic above)
-                // ... assuming manual enrollment if secret is known or skipped for now
-                console.log("👉 If the user is already registered but missing from wallet, you might need to re-run your network script or delete the CA data to reset.");
-             } catch(e) {}
+             // Fallback logic could go here if you wanted to handle re-enrollment
         }
         console.error(`❌ Failed to register admin: ${error}`);
     }

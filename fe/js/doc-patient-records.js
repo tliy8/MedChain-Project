@@ -7,6 +7,7 @@ import { api } from './services/api.service.js';
 if (!authService.isAuthenticated()) {
     window.location.replace('login.html');
 }
+const doctorId = localStorage.getItem('fabricId'); 
 
 /* ================================
    READ PATIENT ID
@@ -64,23 +65,28 @@ async function checkConsentOrBlock() {
    LOAD DOCTOR PROFILE
 ================================ */
 async function loadDoctorProfile() {
-    let profile = {
-        name: localStorage.getItem('name') || "Doctor",
-        fabricId: localStorage.getItem('fabricId') || "..."
-    };
+    console.log("👤 loadDoctorProfile called");
 
+    // Debug 1: Check if elements exist
+    if (!elements.sidebarName) console.error("❌ Error: sidebarName element not found in DOM");
+    if (!elements.sidebarId) console.error("❌ Error: sidebarId element not found in DOM");
+    let profile = { 
+        name: localStorage.getItem('name') || "Doctor", 
+        fabricId: localStorage.getItem('fabricId') || "...",
+        org: localStorage.getItem('org') || "Org2"
+    };
+    
     try {
         const apiProfile = await api.get('/user/me');
-        if (apiProfile) profile = apiProfile;
-    } catch {}
+        if(apiProfile && apiProfile.name) profile = apiProfile;
+    } catch(e) {}
 
-    if (elements.sidebarName) {
-        elements.sidebarName.innerText =
-            `Dr. ${profile.name.replace(/^Dr\.\s+/i, '')}`;
-    }
-    if (elements.sidebarId) {
-        elements.sidebarId.innerText = `ID: ${profile.fabricId}`;
-    }
+    const displayName = `Dr. ${profile.name.replace(/^Dr\.\s+/i, '')}`;
+    console.log(sdebarname);
+    if(elements.sidebarName) elements.sidebarName.innerText = displayName;
+    if(elements.sidebarId) elements.sidebarId.innerText = `ID: ${profile.fabricId}`;
+    if(elements.nodeIdentity) elements.nodeIdentity.innerText = profile.fabricId;
+    if(elements.connectedPeer) elements.connectedPeer.innerText = 'peer0.org2.medchain.net';
 }
 
 /* ================================
@@ -88,7 +94,7 @@ async function loadDoctorProfile() {
 ================================ */
 async function loadPatientDetails() {
     try {
-        const p = await api.get(`/user/${patientId}`);
+        const p = await api.get(`/patient/${patientId}`);
         if (elements.pagePatientName)
             elements.pagePatientName.innerText = `Patient: ${p.name}`;
         if (elements.pagePatientIC)
@@ -252,27 +258,28 @@ window.verifyAndOpen = async (recordId) => {
         icon.innerText = 'error';
     }
 };
-
 /* ================================
-   ADD NEW RECORD (SECURE)
+   SETUP UPLOAD LINK (FOOLPROOF)
 ================================ */
-if (elements.addNewRecordBtn) {
-    elements.addNewRecordBtn.addEventListener('click', async () => {
-        const allowed = await checkConsentOrBlock();
-        if (!allowed) return;
+const uploadLink = document.getElementById('addNewRecordLink');
 
-        window.location.href = `doc-upload-record.html?id=${patientId}`;
-    });
+if (uploadLink && patientId) {
+    // 1. Set the destination URL directly in the HTML
+    // CHECK YOUR FILENAME: Is it 'doc-upload-record.html' or 'doc_upload_record.html'?
+    uploadLink.href = `doc-upload-record.html?id=${patientId}`; 
+    
+    console.log(`✅ Link set to: ${uploadLink.href}`);
+} else if (!uploadLink) {
+    console.error("❌ Link element 'addNewRecordLink' not found in HTML.");
 }
 
 /* ================================
    BOOTSTRAP (NO RACE CONDITION)
 ================================ */
 document.addEventListener('DOMContentLoaded', async () => {
+    loadDoctorProfile();
     const allowed = await checkConsentOrBlock();
     if (!allowed) return;
-
-    loadDoctorProfile();
     loadPatientDetails();
     loadMedicalRecords();
 });

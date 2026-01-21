@@ -71,7 +71,7 @@ async function loadConsentData() {
         let doctors = [];
         try {
             // Should fetch real doctors registered under Org2
-            doctors = await api.get('/doctors');
+            doctors = await api.get('/doctor/list');
             if (!doctors || doctors.length === 0) {
                  // Fallback mock list if API /doctors fails or returns empty, for testing UI flow
                  doctors = [

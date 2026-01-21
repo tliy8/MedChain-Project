@@ -199,7 +199,7 @@ async function verifyAndOpen(recordId) {
 
         if (response && response.metadata) {
             const integrity = response.integrity || {};
-
+            console.log(response)
             // C. STEP 1: SHOW LEDGER DATA
             setTimeout(() => {
                 if(progressBar) progressBar.style.width = '50%';
